@@ -1,0 +1,29 @@
+Network_Name: Pruned
+
+TrainDir: Train_Out
+DataDir: /home/cb719/Documents/TrackFinder/Data/hybrid10kv11
+
+comet_api_key: 
+
+Training_learning_rate: 0.00059938
+Training_learning_beta1: 0.947
+Training_learning_beta2: 0.935
+Training_early_stopping: 30
+Training_ES_epoch: 650
+Training_regularization: 0.001448
+Training_batch_size: 154
+Training_epochs: 800
+Training_validation_split: 0.1
+Training_lr_factor: 0.5
+Training_lr_patience: 10
+Training_lr_min_delta: 0.0001
+Training_lr_cooldown: 2
+Training_lr_minimum: 0.00000001
+
+Sparsity: 0.93
+Pruning_begin_epoch: 100
+Pruning_end_epoch: 650
+Pruning_Frequency: 59
+
+Layer_bits: 14
+Layer_ints: 2

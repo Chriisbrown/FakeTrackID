@@ -1,0 +1,13 @@
+xTree_name: XGB
+TrainDir: GBDT_Train_Out
+DataDir: /home/cb719/Documents/TrackFinder/Data/hybrid10kv11
+
+comet_api_key: 
+
+Training_learning_rate: 0.449509974
+Training_gamma: 0.0
+Training_n_estimators: 100
+Training_max_depth: 3
+Training_min_child_weight: 1
+Training_subsample: 0.8955137
+Training_alpha: 0.78584                
