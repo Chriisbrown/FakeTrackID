@@ -25,7 +25,7 @@ if sys.argv[1] == "NN":
 
     os.system("mv "+yamlparameters["Network_Name"]+".png NNOutput/Images/FinalResult.png")
     os.system("cp parameters.yml NNOutput/parameters.yml")
-    os.system("rm -r " +yamlparameters["TrainDir"])
+    #os.system("rm -r " +yamlparameters["TrainDir"])
 
 if sys.argv[1] == "NNOptimiser":
     os.system("python optimiser.py")

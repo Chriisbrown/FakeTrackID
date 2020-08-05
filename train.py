@@ -93,7 +93,7 @@ if __name__ == "__main__":
     #                                                                        begin_step=yamlparameters["Pruning_begin_epoch"]*steps_per_epoch, 
     #                                                                        end_step=yamlparameters["Pruning_end_epoch"]*steps_per_epoch)}
 
-    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(initial_sparsity=0.0,
+    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(
                                                                              target_sparsity=yamlparameters["Sparsity"],
                                                                              begin_step=yamlparameters["Pruning_begin_epoch"]*steps_per_epoch, 
                                                                              end_step=yamlparameters["Pruning_end_epoch"]*steps_per_epoch,
@@ -101,13 +101,13 @@ if __name__ == "__main__":
     
 
     #keras_model = models.qdense_model(Input(shape=X_train.shape[1:]), 
-                                       l1Reg=yamlparameters["Training_regularization"],
-                                       bits=yamlparameters["Layer_bits"],
-                                       ints=yamlparameters["Layer_ints"])
+    #                                   l1Reg=yamlparameters["Training_regularization"],
+    #                                   bits=yamlparameters["Layer_bits"],
+    #                                   ints=yamlparameters["Layer_ints"])
     #keras_model = prune.prune_low_magnitude(keras_model, **pruning_params)
     
 
-    keras_model = models.dense_model_RegBN(Input(shape=X_train.shape[1:]), 
+    keras_model = models.dense_model_regBN(Input(shape=X_train.shape[1:]), 
                                            l1Reg=yamlparameters["Training_regularization"])
 
 

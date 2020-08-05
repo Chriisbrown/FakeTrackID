@@ -23,7 +23,7 @@ Training_lr_minimum: 0.00000001
 Sparsity: 0.93
 Pruning_begin_epoch: 100
 Pruning_end_epoch: 650
-Pruning_Frequency: 59
+Pruning_frequency: 59
 
 Layer_bits: 14
 Layer_ints: 2
