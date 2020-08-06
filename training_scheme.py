@@ -30,6 +30,9 @@ if sys.argv[1] == "NN":
 if sys.argv[1] == "NNOptimiser":
     os.system("python optimiser.py")
 
+if sys.argv[1] == "NNPruneOptimiser":
+    os.system("python pruningoptimiser.py")
+
 if sys.argv[1] == "GBDT":
 
     parameters = open("GBDTparameters.yml")

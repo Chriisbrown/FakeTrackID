@@ -2,4 +2,5 @@ Data/**
 GBDTOutput/**
 NNOutput/**
 __pycache__/**
-*.yml
+parameters.yml
+GBDTparameters.yml
