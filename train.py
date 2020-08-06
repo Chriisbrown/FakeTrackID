@@ -88,27 +88,27 @@ if __name__ == "__main__":
     steps_per_epoch = int(len(X_train)/yamlparameters["Training_batch_size"])
 
     
-    #pruning_params = {"pruning_schedule" : pruning_schedule.PolynomialDecay(initial_sparsity=0.0,
-    #                                                                        final_sparsity=yamlparameters["Sparsity"],
-    #                                                                        begin_step=yamlparameters["Pruning_begin_epoch"]*steps_per_epoch, 
-    #                                                                        end_step=yamlparameters["Pruning_end_epoch"]*steps_per_epoch)}
+    pruning_params = {"pruning_schedule" : pruning_schedule.PolynomialDecay(initial_sparsity=0.0,
+                                                                            final_sparsity=yamlparameters["Sparsity"],
+                                                                            begin_step=yamlparameters["Pruning_begin_epoch"]*steps_per_epoch, 
+                                                                            end_step=yamlparameters["Pruning_end_epoch"]*steps_per_epoch)}
 
-    pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(
-                                                                             target_sparsity=yamlparameters["Sparsity"],
-                                                                             begin_step=yamlparameters["Pruning_begin_epoch"]*steps_per_epoch, 
-                                                                             end_step=yamlparameters["Pruning_end_epoch"]*steps_per_epoch,
-                                                                             frequency=yamlparameters["Pruning_frequency"]*steps_per_epoch)}
+    #pruning_params = {"pruning_schedule" : pruning_schedule.ConstantSparsity(
+    #                                                                         target_sparsity=yamlparameters["Sparsity"],
+    #                                                                         begin_step=yamlparameters["Pruning_begin_epoch"]*steps_per_epoch, 
+    #                                                                         end_step=yamlparameters["Pruning_end_epoch"]*steps_per_epoch,
+    #                                                                         frequency=yamlparameters["Pruning_frequency"]*steps_per_epoch)}
     
 
-    #keras_model = models.qdense_model(Input(shape=X_train.shape[1:]), 
-    #                                   l1Reg=yamlparameters["Training_regularization"],
-    #                                   bits=yamlparameters["Layer_bits"],
-    #                                   ints=yamlparameters["Layer_ints"])
-    #keras_model = prune.prune_low_magnitude(keras_model, **pruning_params)
+    keras_model = models.qdense_model(Input(shape=X_train.shape[1:]), 
+                                       l1Reg=yamlparameters["Training_regularization"],
+                                       bits=yamlparameters["Layer_bits"],
+                                       ints=yamlparameters["Layer_ints"])
+    keras_model = prune.prune_low_magnitude(keras_model, **pruning_params)
     
 
-    keras_model = models.dense_model_regBN(Input(shape=X_train.shape[1:]), 
-                                           l1Reg=yamlparameters["Training_regularization"])
+    #keras_model = models.dense_model_regBN(Input(shape=X_train.shape[1:]), 
+    #                                       l1Reg=yamlparameters["Training_regularization"])
 
 
     

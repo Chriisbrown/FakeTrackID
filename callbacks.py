@@ -1,5 +1,6 @@
 from tensorflow.keras.callbacks import Callback, EarlyStopping,History,ModelCheckpoint,ReduceLROnPlateau,LearningRateScheduler
 import tensorflow as tf
+import math
 
 class EarlyStopAfterPrune(EarlyStopping):
     def __init__(self, monitor='val_loss',
@@ -13,15 +14,18 @@ class EarlyStopAfterPrune(EarlyStopping):
 
 
 class LR_schedule(Callback):
-    def __init__(self,initial_lr,Prune_begin,Prune_end):
+    def __init__(self,initial_lr,Prune_begin,Prune_end,lr_factor_1,lr_factor_2,lr_factor_3):
          super(LR_schedule, self).__init__()
          self.initial_lr = initial_lr
          self.Prune_begin = Prune_begin
          self.Prune_end = Prune_end
+         self.lr_factor_1 = lr_factor_1
+         self.lr_factor_2 = lr_factor_2
+         self.lr_factor_3 = lr_factor_3
 
     def on_epoch_begin(self, epoch,logs=None):
-        if epoch == self.Prune_begin:
-            tf.keras.backend.set_value(self.model.optimizer.lr, self.initial_lr/2)
+        if epoch > self.Prune_begin:
+            tf.keras.backend.set_value(self.model.optimizer.lr, self.initial_lr*self.lr_factor_1+self.intial_lr*self.lr_factor_2*math.exp(-epoch*self.lr_factor_3))
 
         if epoch == self.Prune_end:
             tf.keras.backend.set_value(self.model.optimizer.lr, self.initial_lr)
@@ -39,6 +43,7 @@ class all_callbacks(object):
                  lr_minimum=1e-5,
                  Prune_begin=100,
                  Prune_end=650,
+                 prune_lrs=[1,0,0],
                  outputDir=''):
         
 
@@ -58,7 +63,9 @@ class all_callbacks(object):
                                       patience=stop_patience, 
                                       verbose=1, mode='min', start_epoch=Prune_end)
 
-        self.learning_schedule = LR_schedule(initial_lr=initial_lr,Prune_begin=Prune_begin,Prune_end=Prune_end)
+        self.learning_schedule = LR_schedule(initial_lr=initial_lr,
+                                     Prune_begin=Prune_begin,Prune_end=Prune_end,
+                                     lr_factor_1=prune_lrs[0],lr_factor_2=prune_lrs[1],lr_factor_3=prune_lrs[2])
 
 
   

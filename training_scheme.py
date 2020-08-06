@@ -17,15 +17,15 @@ if sys.argv[1] == "NN":
     os.system("mkdir NNOutput/Models")
     os.system("mkdir NNOutput/Images")
 
-    os.system("mv "+ yamlparameters["TrainDir"]+"/KERAS_check_best_model_weights.h5 Output/Models/Initial_model_weights.h5")
-    os.system("mv "+ yamlparameters["TrainDir"]+"/KERAS_check_best_model.h5 Output/Models/Initial_model.h5")
-    os.system("mv "+ yamlparameters["TrainDir"]+"/KERAS_model.json Output/Models/Initial_model.json")
+    os.system("mv "+ yamlparameters["TrainDir"]+"/KERAS_check_best_model_weights.h5 NNOutput/Models/Initial_model_weights.h5")
+    os.system("mv "+ yamlparameters["TrainDir"]+"/KERAS_check_best_model.h5 NNOutput/Models/Initial_model.h5")
+    os.system("mv "+ yamlparameters["TrainDir"]+"/KERAS_model.json NNOutput/Models/Initial_model.json")
 
-    os.system("mv "+ yamlparameters["TrainDir"]+"/Best_model.h5 Output/Models/Final_model.h5")
+    os.system("mv "+ yamlparameters["TrainDir"]+"/Best_model.h5 NNOutput/Models/Final_model.h5")
 
     os.system("mv "+yamlparameters["Network_Name"]+".png NNOutput/Images/FinalResult.png")
     os.system("cp parameters.yml NNOutput/parameters.yml")
-    #os.system("rm -r " +yamlparameters["TrainDir"])
+    os.system("rm -r " +yamlparameters["TrainDir"])
 
 if sys.argv[1] == "NNOptimiser":
     os.system("python optimiser.py")
