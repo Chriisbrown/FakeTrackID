@@ -147,7 +147,12 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
 
     if parameter=="pt":
         plot_type_name = "$p_T$"
-        bin_range = np.linspace(20,100,11)
+        bin_high = 20
+        bin_low = 100
+        bins = 11
+        bin_width = (bin_high-bin_low)/bins
+        bin_range = np.logspace(bin_low,bin_high,bins)
+        #bin_widths = 
 
     if parameter=="phi":
     
@@ -272,7 +277,7 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
 
 
 def own_roc(trackdf,model_names):
-    thresholds = np.linspace(0,1,100)
+    thresholds = np.linspace(0,1,30)
     tprs = np.zeros([len(model_names),len(thresholds),2])
     fprs = np.zeros([len(model_names),len(thresholds),2])
     tnrs = np.zeros([len(model_names),len(thresholds),2])
@@ -301,13 +306,14 @@ def own_roc(trackdf,model_names):
     ax.set_title("Reciever Operating Characteristic Curves" ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
+        print(np.trapz(fprs[i,:,0],tprs[i,:,0]))
         
-        ax.plot(fprs[i,:,0],tprs[i,:,0],label=model_names[i])
-        ax.plot(fprs[i,:,0]+1.96*tprs[i,:,1],tprs[i,:,0]-1.96*tprs[i,:,1],"--")
-        ax.plot(fprs[i,:,0]-1.96*tprs[i,:,1],tprs[i,:,0]+1.96*tprs[i,:,1],"--")
-        ax.fill_between(fprs[i,:,0], tprs[i,:,0]-1.96*tprs[i,:,1], tprs[i,:,0]+1.96*tprs[i,:,1],color="g",alpha=0.1)
+        ax.plot(fprs[i,:,0],tprs[i,:,0],label=model_names[i] + "AUC: %.3f"%(1+np.trapz(fprs[i,:,0],tprs[i,:,0])))
+        #ax.plot(fprs[i,:,0]+1.96*tprs[i,:,1],tprs[i,:,0]-1.96*tprs[i,:,1],"--")
+        #ax.plot(fprs[i,:,0]-1.96*tprs[i,:,1],tprs[i,:,0]+1.96*tprs[i,:,1],"--")
+        #ax.fill_between(fprs[i,:,0], tprs[i,:,0]-1.96*tprs[i,:,1], tprs[i,:,0]+1.96*tprs[i,:,1],color="g",alpha=0.1)
     
-    ax.errorbar(fprs[2,1,0],tprs[2,1,0], xerr=1.96*fprs[2,1,1], yerr=1.96*tprs[2,1,1],color='g',label="$\chi^2$")
+    ax.errorbar(fprs[2,1,0],tprs[2,1,0], xerr=1.96*fprs[2,1,1], yerr=1.96*tprs[2,1,1],color='g',label="$\chi^2$"+ "AUC: %.3f"%(1+np.trapz(fprs[2,:,0],tprs[2,:,0])))
 
     ax.set_xlim([0.0,0.3])
     ax.set_ylim([0.7,1.0])
@@ -319,7 +325,7 @@ def own_roc(trackdf,model_names):
 
 
     plt.tight_layout()
-    plt.savefig("plots/"+"ownROC" + "highres.png",dpi=600)
+    #plt.savefig("plots/"+"ownROC" + "highres.png",dpi=600)
     plt.savefig("plots/"+"ownROC" + "lowres.png",dpi=100)
 
 
