@@ -38,7 +38,7 @@ config = {
 
 
 
-parameters = open("parameters.yml")
+parameters = open("NNparameters.yml")
 yamlparameters = yaml.load(parameters,Loader=yaml.FullLoader)
 opt = Optimizer(config, api_key=yamlparameters["comet_api_key"], project_name="NNqhmv6",auto_metric_logging=True)
 

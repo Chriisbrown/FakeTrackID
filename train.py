@@ -131,8 +131,11 @@ if __name__ == "__main__":
                             lr_epsilon=yamlparameters["Training_lr_min_delta"], 
                             lr_cooldown=yamlparameters["Training_lr_cooldown"], 
                             lr_minimum=yamlparameters["Training_lr_minimum"],
-                            Prune_begin=yamlparameters["Pruning_begin_epoch"],
-                            Prune_end=yamlparameters["Pruning_end_epoch"],
+                            Prune_begin=experiment.get_parameter("pruning_begin_epoch"),
+                            Prune_end=experiment.get_parameter("pruning_end_epoch"),
+                            prune_lrs=[experiment.get_parameter("pruning_lr_factor_1"),
+                                       experiment.get_parameter("pruning_lr_factor_2"),
+                                       experiment.get_parameter("pruning_lr_factor_3")],
                             outputDir=yamlparameters["TrainDir"])
 
     callbacks.callbacks.append(pruning_callbacks.UpdatePruningStep())

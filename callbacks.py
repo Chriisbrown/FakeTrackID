@@ -75,5 +75,5 @@ class all_callbacks(object):
 
         if outputDir == "None":
            self.callbacks=[
-           self.reduce_lr
+           self.reduce_lr,self.stopping,self.learning_schedule
         ]

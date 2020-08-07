@@ -10,7 +10,7 @@ from sklearn.metrics import roc_auc_score
 from tensorflow_model_optimization.python.core.sparsity.keras import prune, pruning_callbacks, pruning_schedule
 from tensorflow_model_optimization.sparsity.keras import strip_pruning
 
-parameters = open("parameters.yml")
+parameters = open("NNparameters.yml")
 yamlparameters = yaml.load(parameters,Loader=yaml.FullLoader)
 
 config = {
