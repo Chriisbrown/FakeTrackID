@@ -138,11 +138,11 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
 
     if parameter=="eta":
         plot_type_name = "$\eta$"
-        bin_range = np.linspace(-2.34,2.34,20)
+        bin_range = np.linspace(-2.4,2.4,20)
 
     if parameter=="pt":
         plot_type_name = "$p_T$"
-        bin_range = np.linspace(0,200,10)
+        bin_range = np.linspace(20,100,11)
 
     if parameter=="phi":
     
@@ -155,12 +155,12 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
 
     temp_df = pd.DataFrame()
     
-    tprs = np.zeros([len(model_names),len(bin_range)-1,2])
-    fprs = np.zeros([len(model_names),len(bin_range)-1,2])
-    tnrs = np.zeros([len(model_names),len(bin_range)-1,2])
-    fnrs = np.zeros([len(model_names),len(bin_range)-1,2])
+    tprs = np.zeros([len(model_names),len(bin_range),2])
+    fprs = np.zeros([len(model_names),len(bin_range),2])
+    tnrs = np.zeros([len(model_names),len(bin_range),2])
+    fnrs = np.zeros([len(model_names),len(bin_range),2])
 
-    for i in range(len(bin_range)-1):
+    for i in range(len(bin_range)):
         temp_df = trackdf[(trackdf["trk_"+parameter] > bin_range[i]-bin_width/2) & (trackdf["trk_"+parameter] <= bin_range[i]+bin_width/2)]
 
         temp_tprs,temp_fprs,temp_tnrs,temp_fnrs,totalstrue,totalsfalse = newfull_rates(temp_df,model_names,threshold)
@@ -177,7 +177,7 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
         fnrs[:,i,0] = temp_fnrs
         fnrs[:,i,1] = np.sqrt((temp_fnrs*(1-temp_fnrs))/totalsfalse)
     
-    bin_range =  bin_range[0:-1]
+    
         
 
     fig, ax = plt.subplots(figsize=(12,12)) 
@@ -186,8 +186,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("True Positive Rate vs " +plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,tprs[i,:,0],yerr=tprs[i,:,1],xerr=bin_width, label=model_names[i])
-    ax.errorbar(bin_range,tprs[2,:,0],yerr=tprs[2,:,1],xerr=bin_width, label="$\chi^2$ ")
+        ax.errorbar(bin_range,tprs[i,:,0],yerr=tprs[i,:,1],xerr=bin_width,fmt='.', label=model_names[i])
+    ax.errorbar(bin_range,tprs[2,:,0],yerr=tprs[2,:,1],xerr=bin_width,fmt='.', label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("TPR",ha="right",y=1,fontsize=16)
@@ -206,8 +206,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("False Positive Rate vs " +plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,fprs[i,:,0],yerr=fprs[i,:,1],xerr=bin_width, label=model_names[i])
-    ax.errorbar(bin_range,fprs[2,:,0],yerr=fprs[2,:,1],xerr=bin_width, label="$\chi^2$ ")
+        ax.errorbar(bin_range,fprs[i,:,0],yerr=fprs[i,:,1],xerr=bin_width, fmt='.',label=model_names[i])
+    ax.errorbar(bin_range,fprs[2,:,0],yerr=fprs[2,:,1],xerr=bin_width, fmt='.',label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("FPR",ha="right",y=1,fontsize=16)
@@ -227,8 +227,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("True Negative Rate vs "+plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,tnrs[i,:,0],yerr=tnrs[i,:,1],xerr=bin_width, label=model_names[i])
-    ax.errorbar(bin_range,tnrs[2,:,0],yerr=tnrs[2,:,1],xerr=bin_width, label="$\chi^2$ ")
+        ax.errorbar(bin_range,tnrs[i,:,0],yerr=tnrs[i,:,1],xerr=bin_width,fmt='.', label=model_names[i])
+    ax.errorbar(bin_range,tnrs[2,:,0],yerr=tnrs[2,:,1],xerr=bin_width, fmt='.',label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("TNR",ha="right",y=1,fontsize=16)
@@ -248,8 +248,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("False Negative Rate vs "+plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,fnrs[i,:,0],yerr=fnrs[i,:,1],xerr=bin_width, label=model_names[i])
-    ax.errorbar(bin_range,fnrs[2,:,0],yerr=fnrs[2,:,1],xerr=bin_width, label="$\chi^2$ ")
+        ax.errorbar(bin_range,fnrs[i,:,0],yerr=fnrs[i,:,1],xerr=bin_width, fmt='.',label=model_names[i])
+    ax.errorbar(bin_range,fnrs[2,:,0],yerr=fnrs[2,:,1],xerr=bin_width,fmt='.', label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("FNR",ha="right",y=1,fontsize=16)
