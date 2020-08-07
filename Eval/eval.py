@@ -88,10 +88,10 @@ trackdf["class_1"][trackdf["class_1"]<=threshold] = 0
 
 model_names = ("Keras_NN","CMSSW_NN","Chi2 Cut")
 
-eval_funcs.roc_auc(trackdf,model_names)
+#eval_funcs.roc_auc(trackdf,model_names)
 
 eval_funcs.bins(trackdf,model_names,"eta")
-eval_funcs.bins(trackdf,model_names,"pt")
+#eval_funcs.bins(trackdf,model_names,"pt")
 #eval_funcs.bins(trackdf,model_names,"phi")
 
 #eval_funcs.own_roc(trackdf,model_names)
