@@ -21,7 +21,7 @@ def streamlined(trackdf,threshold,model_names):
     for i in range(len(model_names)):
         trackdf["class_"+str(i)] = trackdf["class_output_"+str(i)]
         trackdf["class_"+str(i)][trackdf["class_"+str(i)]>threshold] = 1
-        trackdf["class_"+str(i)][trackdf["class_"+str(i)]<=threshold] = 0
+        trackdf["class_"+str(i)][trackdf["class_"+str(i)]<=threshold] = 0  
 
         TN[i], FP[i], FN[i], TP[i] = confusion_matrix(trackdf["trk_fake"],trackdf["class_"+str(i)]).ravel()
 
@@ -143,21 +143,32 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
         bins = 20
         bin_width = (bin_high-bin_low)/bins
         bin_range = np.linspace(bin_low+bin_width/2,bin_high-bin_width/2,bins)
-        print(bin_range)
+        bin_widths = [bin_width/2 for i in range(len(bin_range))]
+
+        
+        
 
     if parameter=="pt":
         plot_type_name = "$p_T$"
-        bin_high = 20
-        bin_low = 100
+        bin_high = 100
+        bin_low = 2
         bins = 11
         bin_width = (bin_high-bin_low)/bins
-        bin_range = np.logspace(bin_low,bin_high,bins)
-        #bin_widths = 
+        bin_full_range = np.logspace(np.log10(bin_low),np.log10(bin_high),bins)
+        bin_widths = [(bin_full_range[i+1]-bin_full_range[i])/2 for i in range(len(bin_full_range)-1)]
+        bin_range = [(bin_full_range[i]+bin_widths[i]) for i in range(len(bin_full_range)-1)]
+
 
     if parameter=="phi":
     
         plot_type_name = "$\phi$"
-        bin_range = np.linspace(-3.141,3.141,10)
+        bin_high = 3.14
+        bin_low = -3.14
+        bins = 11
+        bin_width = (bin_high-bin_low)/bins
+        bin_range = np.linspace(bin_low+bin_width/2,bin_high-bin_width/2,bins)
+        bin_widths = [bin_width/2 for i in range(len(bin_range))]
+
         
 
     plot_name = parameter
@@ -171,7 +182,7 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     fnrs = np.zeros([len(model_names),len(bin_range),2])
 
     for i in range(len(bin_range)):
-        temp_df = trackdf[(trackdf["trk_"+parameter] > bin_range[i]-bin_width/2) & (trackdf["trk_"+parameter] <= bin_range[i]+bin_width/2)]
+        temp_df = trackdf[(trackdf["trk_"+parameter] > bin_range[i]-bin_widths[i]) & (trackdf["trk_"+parameter] <= bin_range[i]+bin_widths[i])]
 
         temp_tprs,temp_fprs,temp_tnrs,temp_fnrs,totalstrue,totalsfalse = newfull_rates(temp_df,model_names,threshold)
 
@@ -196,10 +207,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("True Positive Rate vs " +plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,tprs[i,:,0],yerr=tprs[i,:,1],xerr=bin_width/2,fmt='.', label=model_names[i])
-    ax.errorbar(bin_range,tprs[2,:,0],yerr=tprs[2,:,1],xerr=bin_width/2,fmt='.', label="$\chi^2$ ")
-
-    ax.set_ylim(0.9,0.98)
+        ax.errorbar(bin_range,tprs[i,:,0],yerr=tprs[i,:,1],xerr=bin_widths,fmt='.', label=model_names[i])
+    ax.errorbar(bin_range,tprs[2,:,0],yerr=tprs[2,:,1],xerr=bin_widths,fmt='.', label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("TPR",ha="right",y=1,fontsize=16)
@@ -218,8 +227,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("False Positive Rate vs " +plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,fprs[i,:,0],yerr=fprs[i,:,1],xerr=bin_width/2, fmt='.',label=model_names[i])
-    ax.errorbar(bin_range,fprs[2,:,0],yerr=fprs[2,:,1],xerr=bin_width/2, fmt='.',label="$\chi^2$ ")
+        ax.errorbar(bin_range,fprs[i,:,0],yerr=fprs[i,:,1],xerr=bin_widths, fmt='.',label=model_names[i])
+    ax.errorbar(bin_range,fprs[2,:,0],yerr=fprs[2,:,1],xerr=bin_widths, fmt='.',label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("FPR",ha="right",y=1,fontsize=16)
@@ -239,8 +248,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("True Negative Rate vs "+plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,tnrs[i,:,0],yerr=tnrs[i,:,1],xerr=bin_width/2,fmt='.', label=model_names[i])
-    ax.errorbar(bin_range,tnrs[2,:,0],yerr=tnrs[2,:,1],xerr=bin_width/2, fmt='.',label="$\chi^2$ ")
+        ax.errorbar(bin_range,tnrs[i,:,0],yerr=tnrs[i,:,1],xerr=bin_widths,fmt='.', label=model_names[i])
+    ax.errorbar(bin_range,tnrs[2,:,0],yerr=tnrs[2,:,1],xerr=bin_widths, fmt='.',label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("TNR",ha="right",y=1,fontsize=16)
@@ -260,8 +269,8 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
     ax.set_title("False Negative Rate vs "+plot_type_name ,loc='left',fontsize=20)
 
     for i in range(len(model_names)-1):
-        ax.errorbar(bin_range,fnrs[i,:,0],yerr=fnrs[i,:,1],xerr=bin_width/2, fmt='.',label=model_names[i])
-    ax.errorbar(bin_range,fnrs[2,:,0],yerr=fnrs[2,:,1],xerr=bin_width/2,fmt='.', label="$\chi^2$ ")
+        ax.errorbar(bin_range,fnrs[i,:,0],yerr=fnrs[i,:,1],xerr=bin_widths, fmt='.',label=model_names[i])
+    ax.errorbar(bin_range,fnrs[2,:,0],yerr=fnrs[2,:,1],xerr=bin_widths,fmt='.', label="$\chi^2$ ")
 
     ax.set_xlabel(plot_type_name,ha="right",x=1,fontsize=16)
     ax.set_ylabel("FNR",ha="right",y=1,fontsize=16)
@@ -277,7 +286,7 @@ def bins(trackdf,model_names,parameter,threshold=0.5):
 
 
 def own_roc(trackdf,model_names):
-    thresholds = np.linspace(0,1,30)
+    thresholds = np.linspace(0,1,100)
     tprs = np.zeros([len(model_names),len(thresholds),2])
     fprs = np.zeros([len(model_names),len(thresholds),2])
     tnrs = np.zeros([len(model_names),len(thresholds),2])
@@ -313,10 +322,10 @@ def own_roc(trackdf,model_names):
         #ax.plot(fprs[i,:,0]-1.96*tprs[i,:,1],tprs[i,:,0]+1.96*tprs[i,:,1],"--")
         #ax.fill_between(fprs[i,:,0], tprs[i,:,0]-1.96*tprs[i,:,1], tprs[i,:,0]+1.96*tprs[i,:,1],color="g",alpha=0.1)
     
-    ax.errorbar(fprs[2,1,0],tprs[2,1,0], xerr=1.96*fprs[2,1,1], yerr=1.96*tprs[2,1,1],color='g',label="$\chi^2$"+ "AUC: %.3f"%(1+np.trapz(fprs[2,:,0],tprs[2,:,0])))
+    #ax.errorbar(fprs[2,1,0],tprs[2,1,0], xerr=1.96*fprs[2,1,1], yerr=1.96*tprs[2,1,1],color='g',label="$\chi^2$"+ "AUC: %.3f"%(1+np.trapz(fprs[2,:,0],tprs[2,:,0])))
 
-    ax.set_xlim([0.0,0.3])
-    ax.set_ylim([0.7,1.0])
+    #ax.set_xlim([0.0,0.3])
+    #ax.set_ylim([0.7,1.0])
     #ax.plot(fprs[0,:,0],fprs[0,:,0],"--",color='r',label="Random Guess: 0.5")
     ax.set_xlabel("False Positive Rate",ha="right",x=1,fontsize=16)
     ax.set_ylabel("Identification Efficiency",ha="right",y=1,fontsize=16)

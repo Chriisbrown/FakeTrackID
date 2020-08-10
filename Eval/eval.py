@@ -92,9 +92,9 @@ model_names = ("Keras_NN","CMSSW_NN","Chi2 Cut")
 
 #eval_funcs.bins(trackdf,model_names,"eta")
 #eval_funcs.bins(trackdf,model_names,"pt")
-#eval_funcs.bins(trackdf,model_names,"phi")
+eval_funcs.bins(trackdf,model_names,"phi")
 
-eval_funcs.own_roc(trackdf,model_names)
+#eval_funcs.own_roc(trackdf,model_names)
 
 #eval_funcs.lepton_split(trackdf,model_names)
 
